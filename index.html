@@ -55,6 +55,8 @@ white-space:pre-line;
 <br>
 
 <button onclick="recipe()">レシピ生成</button>
+<button onclick="saveRecipe()">お気に入り保存</button>
+<button onclick="loadRecipe()">お気に入り表示</button>
 
 <div id="result"></div>
 
@@ -110,17 +112,29 @@ document.getElementById("result").innerText = r
 
 }
 
-</script>
+function saveRecipe(){
 
-</body>
-</html>
-<button onclick="saveRecipe()">お気に入り保存</button>
-<button onclick="loadRecipe()">お気に入り表示</button>
+const recipe = document.getElementById("result").innerText
 
+localStorage.setItem("savedRecipe",recipe)
 
+alert("お気に入りに保存しました")
+
+}
+
+function loadRecipe(){
+
+const saved = localStorage.getItem("savedRecipe")
+
+if(saved){
 
 document.getElementById("result").innerText = saved
 
 }
 
 }
+
+</script>
+
+</body>
+</html>
