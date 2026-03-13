@@ -117,21 +117,7 @@ document.getElementById("result").innerText = r
 <button onclick="saveRecipe()">お気に入り保存</button>
 <button onclick="loadRecipe()">お気に入り表示</button>
 
-function saveRecipe(){
 
-const recipe = document.getElementById("result").innerText
-
-localStorage.setItem("savedRecipe",recipe)
-
-alert("お気に入りに保存しました")
-
-}
-
-function loadRecipe(){
-
-const saved = localStorage.getItem("savedRecipe")
-
-if(saved){
 
 document.getElementById("result").innerText = saved
 
