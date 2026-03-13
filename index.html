@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>AIレシピアプリ</title>
+
+<style>
+body{
+font-family:sans-serif;
+background:#f2f2f2;
+text-align:center;
+padding:40px;
+}
+
+.box{
+background:white;
+padding:30px;
+border-radius:10px;
+max-width:500px;
+margin:auto;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+input{
+width:80%;
+padding:10px;
+font-size:16px;
+}
+
+button{
+margin-top:10px;
+padding:10px 20px;
+font-size:16px;
+}
+
+#result{
+margin-top:20px;
+text-align:left;
+white-space:pre-line;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="box">
+
+<h2>AIレシピ生成</h2>
+
+<p>食材を入力</p>
+
+<input id="food">
+
+<br>
+
+<button onclick="recipe()">レシピ生成</button>
+
+<div id="result"></div>
+
+</div>
+
+<script>
+
+function recipe(){
+
+const food = document.getElementById("food").value
+
+const recipes = [
+
+`簡単炒め
+
+材料
+${food}
+
+作り方
+1 食材を切る
+2 フライパンで炒める
+3 塩コショウ
+完成`,
+
+`チャーハン
+
+材料
+${food}
+ご飯
+
+作り方
+1 食材炒める
+2 ご飯入れる
+3 醤油
+完成`,
+
+`サラダ
+
+材料
+${food}
+
+作り方
+1 カット
+2 混ぜる
+3 ドレッシング
+完成`
+
+]
+
+const r = recipes[Math.floor(Math.random()*recipes.length)]
+
+document.getElementById("result").innerText = r
+
+}
+
+</script>
+
+</body>
+</html>
