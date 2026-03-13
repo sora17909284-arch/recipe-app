@@ -4,40 +4,64 @@
 <meta charset="UTF-8">
 <title>AIレシピアプリ</title>
 
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="icon.png">
+
 <style>
+
 body{
-font-family:sans-serif;
-background:#f2f2f2;
+font-family:-apple-system,BlinkMacSystemFont;
+background:#f6f6f6;
 text-align:center;
-padding:40px;
+padding:20px;
 }
 
 .box{
 background:white;
-padding:30px;
-border-radius:10px;
-max-width:500px;
+padding:25px;
+border-radius:20px;
+max-width:420px;
 margin:auto;
-box-shadow:0 0 10px rgba(0,0,0,0.1);
+box-shadow:0 10px 25px rgba(0,0,0,0.1);
+}
+
+h2{
+margin-bottom:10px;
 }
 
 input{
-width:80%;
-padding:10px;
+width:85%;
+padding:12px;
 font-size:16px;
+border-radius:10px;
+border:1px solid #ddd;
 }
 
 button{
 margin-top:10px;
-padding:10px 20px;
-font-size:16px;
+padding:12px 20px;
+font-size:15px;
+border:none;
+border-radius:12px;
+background:#ff914d;
+color:white;
+width:90%;
+}
+
+button:hover{
+opacity:0.9;
 }
 
 #result{
 margin-top:20px;
 text-align:left;
 white-space:pre-line;
+background:#fafafa;
+padding:15px;
+border-radius:10px;
 }
+
 </style>
 
 </head>
@@ -46,18 +70,22 @@ white-space:pre-line;
 
 <div class="box">
 
-<h2>AIレシピ生成</h2>
+<h2>🍳 AIレシピアプリ</h2>
 
 <p>食材を入力</p>
 
-<input id="food">
+<input id="food" placeholder="例：卵、キャベツ">
 
 <br>
 
 <button onclick="recipe()">レシピ生成</button>
+
 <button onclick="openAI()">AIレシピ（無料）</button>
+
 <button onclick="saveRecipe()">お気に入り保存</button>
+
 <button onclick="loadRecipe()">お気に入り表示</button>
+
 <button onclick="showHistory()">履歴を見る</button>
 
 <div id="result"></div>
