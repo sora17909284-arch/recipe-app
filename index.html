@@ -5,14 +5,13 @@
 <title>AIレシピアプリ</title>
 
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="apple-touch-icon" href="icon.png">
 
 <style>
 
 body{
 font-family:-apple-system,BlinkMacSystemFont;
-background:#f6f6f6;
+background:#f2f2f2;
 text-align:center;
 padding:20px;
 }
@@ -38,6 +37,17 @@ border-radius:10px;
 border:1px solid #ddd;
 }
 
+.food-buttons{
+margin-top:10px;
+}
+
+.food-buttons button{
+background:#eee;
+color:black;
+width:auto;
+margin:5px;
+}
+
 button{
 margin-top:10px;
 padding:12px 20px;
@@ -49,17 +59,14 @@ color:white;
 width:90%;
 }
 
-button:hover{
-opacity:0.9;
-}
-
-#result{
+.card{
 margin-top:20px;
+background:#fafafa;
+padding:20px;
+border-radius:15px;
+box-shadow:0 5px 10px rgba(0,0,0,0.1);
 text-align:left;
 white-space:pre-line;
-background:#fafafa;
-padding:15px;
-border-radius:10px;
 }
 
 </style>
@@ -70,11 +77,23 @@ border-radius:10px;
 
 <div class="box">
 
-<h2>🍳 AIレシピアプリ</h2>
+<h2>🍳 冷蔵庫レシピ</h2>
 
 <p>食材を入力</p>
 
-<input id="food" placeholder="例：卵、キャベツ">
+<input id="food" placeholder="例：卵">
+
+<div class="food-buttons">
+
+<button onclick="setFood('卵')">🥚 卵</button>
+
+<button onclick="setFood('鶏肉')">🍗 鶏肉</button>
+
+<button onclick="setFood('キャベツ')">🥬 野菜</button>
+
+<button onclick="setFood('豚肉')">🐷 豚肉</button>
+
+</div>
 
 <br>
 
@@ -88,11 +107,17 @@ border-radius:10px;
 
 <button onclick="showHistory()">履歴を見る</button>
 
-<div id="result"></div>
+<div id="result" class="card"></div>
 
 </div>
 
 <script>
+
+function setFood(food){
+
+document.getElementById("food").value = food
+
+}
 
 function recipe(){
 
@@ -100,7 +125,7 @@ const food = document.getElementById("food").value
 
 const recipes = [
 
-`簡単炒め
+`🍳 ${food}の簡単炒め
 
 材料
 ${food}
@@ -111,7 +136,7 @@ ${food}
 3 塩コショウ
 完成`,
 
-`チャーハン
+`🍚 ${food}チャーハン
 
 材料
 ${food}
@@ -123,7 +148,7 @@ ${food}
 3 醤油
 完成`,
 
-`サラダ
+`🥗 ${food}サラダ
 
 材料
 ${food}
