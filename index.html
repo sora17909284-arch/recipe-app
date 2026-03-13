@@ -25,27 +25,12 @@ margin:auto;
 box-shadow:0 10px 25px rgba(0,0,0,0.1);
 }
 
-h2{
-margin-bottom:10px;
-}
-
 input{
 width:85%;
 padding:12px;
 font-size:16px;
 border-radius:10px;
 border:1px solid #ddd;
-}
-
-.food-buttons{
-margin-top:10px;
-}
-
-.food-buttons button{
-background:#eee;
-color:black;
-width:auto;
-margin:5px;
 }
 
 button{
@@ -59,6 +44,13 @@ color:white;
 width:90%;
 }
 
+.food-buttons button{
+background:#eee;
+color:black;
+width:auto;
+margin:5px;
+}
+
 .card{
 margin-top:20px;
 background:#fafafa;
@@ -69,8 +61,15 @@ text-align:left;
 white-space:pre-line;
 }
 
-</style>
+.ad{
+margin-top:20px;
+padding:15px;
+background:#eee;
+border-radius:10px;
+font-size:14px;
+}
 
+</style>
 </head>
 
 <body>
@@ -79,23 +78,26 @@ white-space:pre-line;
 
 <h2>🍳 冷蔵庫レシピ</h2>
 
-<p>食材を入力</p>
+<p>材料を入力（複数OK）</p>
 
-<input id="food" placeholder="例：卵">
+<input id="food" placeholder="例：卵、キャベツ、鶏肉">
 
 <div class="food-buttons">
 
-<button onclick="setFood('卵')">🥚 卵</button>
-
-<button onclick="setFood('鶏肉')">🍗 鶏肉</button>
-
-<button onclick="setFood('キャベツ')">🥬 野菜</button>
-
-<button onclick="setFood('豚肉')">🐷 豚肉</button>
+<button onclick="setFood('卵')">🥚</button>
+<button onclick="setFood('鶏肉')">🍗</button>
+<button onclick="setFood('キャベツ')">🥬</button>
+<button onclick="setFood('豚肉')">🐷</button>
 
 </div>
 
 <br>
+
+<p>📸 食材写真</p>
+
+<input type="file" accept="image/*" onchange="showImage(event)">
+
+<img id="preview" style="width:100%;margin-top:10px;border-radius:10px">
 
 <button onclick="recipe()">レシピ生成</button>
 
@@ -105,9 +107,16 @@ white-space:pre-line;
 
 <button onclick="loadRecipe()">お気に入り表示</button>
 
-<button onclick="showHistory()">履歴を見る</button>
+<button onclick="showHistory()">履歴</button>
 
 <div id="result" class="card"></div>
+
+<div class="ad">
+
+広告スペース  
+（ここに AdSense を入れる）
+
+</div>
 
 </div>
 
@@ -115,17 +124,23 @@ white-space:pre-line;
 
 function setFood(food){
 
-document.getElementById("food").value = food
+let current=document.getElementById("food").value
+
+if(current===""){
+document.getElementById("food").value=food
+}else{
+document.getElementById("food").value=current+","+food
+}
 
 }
 
 function recipe(){
 
-const food = document.getElementById("food").value
+const food=document.getElementById("food").value
 
-const recipes = [
+const recipes=[
 
-`🍳 ${food}の簡単炒め
+`🍳 ${food}炒め
 
 材料
 ${food}
@@ -133,8 +148,7 @@ ${food}
 作り方
 1 食材を切る
 2 フライパンで炒める
-3 塩コショウ
-完成`,
+3 塩コショウ`,
 
 `🍚 ${food}チャーハン
 
@@ -145,8 +159,7 @@ ${food}
 作り方
 1 食材炒める
 2 ご飯入れる
-3 醤油
-完成`,
+3 醤油`,
 
 `🥗 ${food}サラダ
 
@@ -156,36 +169,51 @@ ${food}
 作り方
 1 カット
 2 混ぜる
-3 ドレッシング
-完成`
+3 ドレッシング`
 
 ]
 
-const r = recipes[Math.floor(Math.random()*recipes.length)]
+const r=recipes[Math.floor(Math.random()*recipes.length)]
 
-document.getElementById("result").innerText = r
+document.getElementById("result").innerText=r
 
 saveHistory(r)
 
 }
 
+function showImage(event){
+
+const file=event.target.files[0]
+
+const reader=new FileReader()
+
+reader.onload=function(e){
+
+document.getElementById("preview").src=e.target.result
+
+}
+
+reader.readAsDataURL(file)
+
+}
+
 function saveRecipe(){
 
-const recipe = document.getElementById("result").innerText
+const recipe=document.getElementById("result").innerText
 
 localStorage.setItem("savedRecipe",recipe)
 
-alert("お気に入りに保存しました")
+alert("保存しました")
 
 }
 
 function loadRecipe(){
 
-const saved = localStorage.getItem("savedRecipe")
+const saved=localStorage.getItem("savedRecipe")
 
 if(saved){
 
-document.getElementById("result").innerText = saved
+document.getElementById("result").innerText=saved
 
 }
 
@@ -193,29 +221,29 @@ document.getElementById("result").innerText = saved
 
 function saveHistory(recipe){
 
-let history = JSON.parse(localStorage.getItem("recipeHistory")) || []
+let history=JSON.parse(localStorage.getItem("recipeHistory"))||[]
 
 history.unshift(recipe)
 
-localStorage.setItem("recipeHistory", JSON.stringify(history))
+localStorage.setItem("recipeHistory",JSON.stringify(history))
 
 }
 
 function showHistory(){
 
-let history = JSON.parse(localStorage.getItem("recipeHistory")) || []
+let history=JSON.parse(localStorage.getItem("recipeHistory"))||[]
 
-document.getElementById("result").innerText = history.join("\n\n------\n\n")
+document.getElementById("result").innerText=history.join("\n\n------\n\n")
 
 }
 
 function openAI(){
 
-const food = document.getElementById("food").value
+const food=document.getElementById("food").value
 
-const prompt = encodeURIComponent(food + " を使った簡単な料理レシピを教えて")
+const prompt=encodeURIComponent(food+" を使った簡単レシピを教えて")
 
-const url = "https://chat.openai.com/?q=" + prompt
+const url="https://chat.openai.com/?q="+prompt
 
 window.open(url,"_blank")
 
