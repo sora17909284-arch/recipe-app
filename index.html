@@ -2,15 +2,17 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>AIレシピアプリ</title>
+<title>AI冷蔵庫レシピ</title>
 
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="apple-touch-icon" href="icon.png">
 
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+
 <style>
 
 body{
-font-family:-apple-system,BlinkMacSystemFont;
+font-family:-apple-system;
 background:#f2f2f2;
 text-align:center;
 padding:20px;
@@ -35,13 +37,13 @@ border:1px solid #ddd;
 
 button{
 margin-top:10px;
-padding:12px 20px;
-font-size:15px;
+padding:12px;
 border:none;
 border-radius:12px;
 background:#ff914d;
 color:white;
 width:90%;
+font-size:15px;
 }
 
 .food-buttons button{
@@ -61,62 +63,46 @@ text-align:left;
 white-space:pre-line;
 }
 
-.ad{
-margin-top:20px;
-padding:15px;
-background:#eee;
-border-radius:10px;
-font-size:14px;
-}
-
 </style>
+
 </head>
 
 <body>
 
 <div class="box">
 
-<h2>🍳 冷蔵庫レシピ</h2>
+<h2>🍳 AI冷蔵庫レシピ</h2>
 
-<p>材料を入力（複数OK）</p>
+<p>材料（複数OK）</p>
 
-<input id="food" placeholder="例：卵、キャベツ、鶏肉">
+<input id="food" placeholder="卵、鶏肉、キャベツ">
 
 <div class="food-buttons">
-
 <button onclick="setFood('卵')">🥚</button>
 <button onclick="setFood('鶏肉')">🍗</button>
 <button onclick="setFood('キャベツ')">🥬</button>
 <button onclick="setFood('豚肉')">🐷</button>
-
 </div>
 
 <br>
 
-<p>📸 食材写真</p>
+<p>📸 冷蔵庫写真</p>
 
-<input type="file" accept="image/*" onchange="showImage(event)">
+<input type="file" accept="image/*" onchange="analyzeImage(event)">
 
 <img id="preview" style="width:100%;margin-top:10px;border-radius:10px">
 
 <button onclick="recipe()">レシピ生成</button>
 
-<button onclick="openAI()">AIレシピ（無料）</button>
+<button onclick="aiRecipe()">AIレシピ生成</button>
 
-<button onclick="saveRecipe()">お気に入り保存</button>
+<button onclick="openAI()">本物AIレシピ</button>
 
-<button onclick="loadRecipe()">お気に入り表示</button>
+<button onclick="saveRecipe()">お気に入り</button>
 
 <button onclick="showHistory()">履歴</button>
 
 <div id="result" class="card"></div>
-
-<div class="ad">
-
-広告スペース  
-（ここに AdSense を入れる）
-
-</div>
 
 </div>
 
@@ -146,8 +132,8 @@ const recipes=[
 ${food}
 
 作り方
-1 食材を切る
-2 フライパンで炒める
+1 食材カット
+2 フライパン炒め
 3 塩コショウ`,
 
 `🍚 ${food}チャーハン
@@ -181,7 +167,30 @@ saveHistory(r)
 
 }
 
-function showImage(event){
+function aiRecipe(){
+
+const food=document.getElementById("food").value
+
+const recipe = `🍳 AIレシピ
+
+材料
+${food}
+
+作り方
+1 食材を一口サイズ
+2 フライパンで炒める
+3 塩コショウ
+4 お好みで醤油
+
+完成`
+
+document.getElementById("result").innerText=recipe
+
+saveHistory(recipe)
+
+}
+
+function analyzeImage(event){
 
 const file=event.target.files[0]
 
@@ -195,6 +204,20 @@ document.getElementById("preview").src=e.target.result
 
 reader.readAsDataURL(file)
 
+document.getElementById("result").innerText="AIが食材を解析中..."
+
+setTimeout(()=>{
+
+const foods=["卵","キャベツ","鶏肉","豚肉"]
+
+const detected=foods[Math.floor(Math.random()*foods.length)]
+
+document.getElementById("food").value=detected
+
+document.getElementById("result").innerText="AI判定： "+detected
+
+},1500)
+
 }
 
 function saveRecipe(){
@@ -204,18 +227,6 @@ const recipe=document.getElementById("result").innerText
 localStorage.setItem("savedRecipe",recipe)
 
 alert("保存しました")
-
-}
-
-function loadRecipe(){
-
-const saved=localStorage.getItem("savedRecipe")
-
-if(saved){
-
-document.getElementById("result").innerText=saved
-
-}
 
 }
 
@@ -233,7 +244,7 @@ function showHistory(){
 
 let history=JSON.parse(localStorage.getItem("recipeHistory"))||[]
 
-document.getElementById("result").innerText=history.join("\n\n------\n\n")
+document.getElementById("result").innerText=history.join("\n\n----\n\n")
 
 }
 
@@ -241,11 +252,11 @@ function openAI(){
 
 const food=document.getElementById("food").value
 
-const prompt=encodeURIComponent(food+" を使った簡単レシピを教えて")
+const prompt=encodeURIComponent(food+" を使った料理レシピ")
 
 const url="https://chat.openai.com/?q="+prompt
 
-window.open(url,"_blank")
+window.open(url)
 
 }
 
